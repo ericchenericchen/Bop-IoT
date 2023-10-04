@@ -12,7 +12,7 @@ import grove_rgb_lcd as lcd
 # Modules for my apps
 import my_reddit
 import my_weather
-import my_spotify  # TODO: Create my_app.py using another API, following the examples as a template
+#import my_spotify  # TODO: Create my_app.py using another API, following the examples as a template
 
 PORT_BUZZER = 2     # D2
 PORT_BUTTON = 4     # D4
@@ -34,7 +34,7 @@ APPS = [
     my_weather.WEATHER_APP,
     my_reddit.QOTD_APP,
     # TODO: Add your new app here
-    my_spotify.SPOTIFY_APP
+    #my_spotify.SPOTIFY_APP
 ]
 
 # Cache to store values so we save time and don't abuse the APIs
