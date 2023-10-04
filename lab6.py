@@ -12,7 +12,7 @@ import grove_rgb_lcd as lcd
 # Modules for my apps
 import my_reddit
 import my_weather
-#import my_spotify  # TODO: Create my_app.py using another API, following the examples as a template
+import my_spotify  # TODO: Create my_app.py using another API, following the examples as a template
 
 PORT_BUZZER = 2     # D2
 PORT_BUTTON = 4     # D4
@@ -34,7 +34,7 @@ APPS = [
     my_weather.WEATHER_APP,
     my_reddit.QOTD_APP,
     # TODO: Add your new app here
-    #my_spotify.SPOTIFY_APP
+    my_spotify.SPOTIFY_APP
 ]
 
 # Cache to store values so we save time and don't abuse the APIs
@@ -71,13 +71,13 @@ while True:
         if(new_potentiometer != old_potentiometer):
             old_potentiometer = new_potentiometer
 
-            if potentiometer_val < 20:
+            if new_potentiometer < 20:
                 lcd.setRGB(0, 128, 0) #base color
-            elif potentiometer_val < 40:
+            elif new_potentiometer < 40:
                 lcd.setRGB(255, 0, 0) #red
-            elif potentiometer_val < 60:
+            elif new_potentiometer < 60:
                 lcd.setRGB(0, 255, 0) #green
-            elif potentiometer_val < 80:
+            elif new_potentiometer < 80:
                 lcd.setRGB(0, 0, 255) #blue
             else:
                 lcd.setRGB(255, 0, 255) #purple
