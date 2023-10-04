@@ -98,8 +98,9 @@ def get_userID(auth_string):
 
 def spotify_init():
 
-    auth_string = post_auth()
-
+    retrieve_post = post_auth()
+    auth_string = retrieve_post[0] + " " + retrieve_post[1]
+    
     headers = {
         #SpotifyAPI requires Authorization from your app, which is generated from the post_auth()
         'Authorization': auth_string
