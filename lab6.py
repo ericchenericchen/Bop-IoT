@@ -70,23 +70,23 @@ while True:
 
         grovepi.digitalWrite(PORT_BUZZER, 0)
 
-        #Check potentiometer, have range measurement from 0-99
-        new_potentiometer = grovepi.analogRead(PORT_POTENTIOMETER) % 100
+        # #Check potentiometer, have range measurement from 0-99
+        # new_potentiometer = grovepi.analogRead(PORT_POTENTIOMETER) % 100
 
-        #if potentiometer measurement changed, check to change LCD color
-        if(new_potentiometer != old_potentiometer):
-            old_potentiometer = new_potentiometer
+        # #if potentiometer measurement changed, check to change LCD color
+        # if(new_potentiometer != old_potentiometer):
+        #     old_potentiometer = new_potentiometer
 
-            if new_potentiometer < 20:
-                lcd.setRGB(0, 128, 0) #base color
-            elif new_potentiometer < 40:
-                lcd.setRGB(255, 0, 0) #red
-            elif new_potentiometer < 60:
-                lcd.setRGB(0, 255, 0) #green
-            elif new_potentiometer < 80:
-                lcd.setRGB(0, 0, 255) #blue
-            else:
-                lcd.setRGB(255, 0, 255) #purple
+        #     if new_potentiometer < 20:
+        #         lcd.setRGB(0, 128, 0) #base color
+        #     elif new_potentiometer < 40:
+        #         lcd.setRGB(255, 0, 0) #red
+        #     elif new_potentiometer < 60:
+        #         lcd.setRGB(0, 255, 0) #green
+        #     elif new_potentiometer < 80:
+        #         lcd.setRGB(0, 0, 255) #blue
+        #     else:
+        #         lcd.setRGB(255, 0, 255) #purple
 
         # Display app name
         lcd.setText_norefresh(APPS[app]['name'])
