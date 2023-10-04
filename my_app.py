@@ -149,17 +149,4 @@ SPOTIFY_APP = {
 
 
 if __name__ == '__main__':
-    # retrieve_post = post_auth()
-
-    # auth_string = retrieve_post[0] + " " + retrieve_post[1]
-
-    spotify_output = spotify_init()
-
-    # song_text = "song: " + spotify_output[0] + ", artists: "
-
-    # for i in range(0, len(spotify_output[1])):
-    #     song_text = song_text + spotify_output[1][i] + ", "
-    
-    # song_text = song_text[0:len(song_text) - 2]
-
-    print(spotify_output)
+    spotify_init()
