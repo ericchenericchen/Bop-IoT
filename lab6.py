@@ -95,7 +95,7 @@ while True:
         lcd.setText_norefresh('\n' + CACHE[app][ind:ind+LCD_LINE_LEN])
 
         # TODO: Make the output scroll across the screen (should take 1-2 lines of code)
-        if ind+LCD_LINE_LEN < len(CACHE[app]):
+        if ind+LCD_LINE_LEN < len(CACHE[app] - 1):
             ind = ind + 1
         else:
             ind = 0
