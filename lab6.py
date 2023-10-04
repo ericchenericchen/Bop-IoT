@@ -12,10 +12,7 @@ import grove_rgb_lcd as lcd
 # Modules for my apps
 import my_reddit
 import my_weather
-# import my_spotify  # TODO: Create my_app.py using another API, following the examples as a template
-
-lcd.setText_norefresh("alive")
-lcd.setRGB(255, 0, 0)
+import my_app  # TODO: Create my_app.py using another API, following the examples as a template
 
 PORT_BUZZER = 2     # D2
 PORT_BUTTON = 4     # D4
@@ -26,21 +23,14 @@ LCD_LINE_LEN = 16
 # Setup
 grovepi.pinMode(PORT_BUZZER, "OUTPUT")
 grovepi.pinMode(PORT_BUTTON, "INPUT")
-lcd.setRGB(0, 0, 100)
-
-#grovepi.analogRead(PORT_POTENTIOMETER)
-lcd.setRGB(0, 100, 0)
-
 grovepi.pinMode(PORT_POTENTIOMETER, "INPUT")
-
-lcd.setRGB(0, 128, 0)
 
 # Installed Apps!
 APPS = [
     my_weather.WEATHER_APP,
     my_reddit.QOTD_APP,
     # TODO: Add your new app here
-    # my_spotify.SPOTIFY_APP
+    my_app.SPOTIFY_APP
 ]
 
 # Cache to store values so we save time and don't abuse the APIs
@@ -48,6 +38,7 @@ CACHE = [''] * len(APPS)
 for i in range(len(APPS)):
     # Includes a two space offset so that the scrolling works better
     CACHE[i] = '  ' + APPS[i]['init']()
+    print('A')
 
 app = 0     # Active app
 ind = 0     # Output index
