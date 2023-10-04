@@ -14,6 +14,8 @@ import my_reddit
 import my_weather
 import my_spotify  # TODO: Create my_app.py using another API, following the examples as a template
 
+lcd.setText_norefresh("alive")
+
 PORT_BUZZER = 2     # D2
 PORT_BUTTON = 4     # D4
 PORT_POTENTIOMETER = 1 # D1
