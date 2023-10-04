@@ -2,17 +2,17 @@ import requests
 import sys
 import time
 
-sys.path.append('/home/pi/Dexter/GrovePi/Software/Python')
-#sys.path.append('/home/pi/Dexter/GrovePi/Software/Python/grove_rgb_lcd')
+# sys.path.append('/home/pi/Dexter/GrovePi/Software/Python')
+# #sys.path.append('/home/pi/Dexter/GrovePi/Software/Python/grove_rgb_lcd')
 
 
-import grovepi
-import grove_rgb_lcd as lcd
+# import grovepi
+# import grove_rgb_lcd as lcd
 
 # Modules for my apps
 import my_reddit
 import my_weather
-import my_app  # TODO: Create my_app.py using another API, following the examples as a template
+import my_spotify  # TODO: Create my_app.py using another API, following the examples as a template
 
 PORT_BUZZER = 2     # D2
 PORT_BUTTON = 4     # D4
@@ -21,16 +21,16 @@ PORT_POTENTIOMETER = 1 # D1
 LCD_LINE_LEN = 16
 
 # Setup
-grovepi.pinMode(PORT_BUZZER, "OUTPUT")
-grovepi.pinMode(PORT_BUTTON, "INPUT")
-grovepi.pinMode(PORT_POTENTIOMETER, "INPUT")
+# grovepi.pinMode(PORT_BUZZER, "OUTPUT")
+# grovepi.pinMode(PORT_BUTTON, "INPUT")
+# grovepi.pinMode(PORT_POTENTIOMETER, "INPUT")
 
 # Installed Apps!
 APPS = [
     my_weather.WEATHER_APP,
     my_reddit.QOTD_APP,
     # TODO: Add your new app here
-    my_app.SPOTIFY_APP
+    my_spotify.SPOTIFY_APP
 ]
 
 # Cache to store values so we save time and don't abuse the APIs
@@ -60,10 +60,10 @@ while True:
 
         grovepi.digitalWrite(PORT_BUZZER, 0)
 
-        # #Check potentiometer, have range measurement from 0-99
-        # new_potentiometer = grovepi.analogRead(PORT_POTENTIOMETER) % 100
+        # Check potentiometer, have range measurement from 0-99
+        new_potentiometer = grovepi.analogRead(PORT_POTENTIOMETER) % 100
 
-        # #if potentiometer measurement changed, check to change LCD color
+        # if potentiometer measurement changed, check to change LCD color
         if(new_potentiometer != old_potentiometer):
             old_potentiometer = new_potentiometer
 
@@ -80,12 +80,14 @@ while True:
 
         # Display app name
         lcd.setText_norefresh(APPS[app]['name'])
+        # print(APPS[app]['name'])
 
         # Scroll output
         lcd.setText_norefresh('\n' + CACHE[app][ind:ind+LCD_LINE_LEN])
+        # print('\n' + CACHE[app][ind:ind+LCD_LINE_LEN])
 
         # TODO: Make the output scroll across the screen (should take 1-2 lines of code)
-        if ind+LCD_LINE_LEN < len(CACHE[app] - 1):
+        if ind+LCD_LINE_LEN < len(CACHE[app]) - 1:
             ind = ind + 1
         else:
             ind = 0

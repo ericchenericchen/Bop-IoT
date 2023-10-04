@@ -134,6 +134,7 @@ def spotify_init():
     
         song_text = song_text[0:len(song_text) - 2]
 
+        print(song_text)
         return song_text
 
     else:
