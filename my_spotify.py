@@ -100,7 +100,7 @@ def spotify_init():
 
     retrieve_post = post_auth()
     auth_string = retrieve_post[0] + " " + retrieve_post[1]
-    
+
     headers = {
         #SpotifyAPI requires Authorization from your app, which is generated from the post_auth()
         'Authorization': auth_string
@@ -127,10 +127,14 @@ def spotify_init():
         for i in range(0, len(playlist_info["items"][rand_index]["track"]["artists"])):
             artist_names.append(playlist_info["items"][rand_index]["track"]["artists"][i]["name"])
 
-        # print(song_name)
-        # print(artist_names)
+        song_text = "song: " + song_name + ", artists: "
 
-        return (song_name, artist_names)
+        for i in range(0, len(spotify_output[1])):
+            song_text = song_text + artist_names[i] + ", "
+    
+        song_text = song_text[0:len(song_text) - 2]
+
+        return song_text
 
     else:
         print('error: got response code %d' % response.status_code)
