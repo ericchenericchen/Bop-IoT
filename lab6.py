@@ -3,7 +3,7 @@ import sys
 import time
 
 sys.path.append('/home/pi/Dexter/GrovePi/Software/Python')
-sys.path.append('/home/pi/Dexter/GrovePi/Software/Python/grove_rgb_lcd')
+#sys.path.append('/home/pi/Dexter/GrovePi/Software/Python/grove_rgb_lcd')
 
 
 import grovepi
