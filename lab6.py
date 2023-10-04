@@ -15,6 +15,7 @@ import my_weather
 import my_spotify  # TODO: Create my_app.py using another API, following the examples as a template
 
 lcd.setText_norefresh("alive")
+lcd.setRGB(255, 0, 0)
 
 PORT_BUZZER = 2     # D2
 PORT_BUTTON = 4     # D4
