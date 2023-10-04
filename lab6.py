@@ -26,8 +26,11 @@ LCD_LINE_LEN = 16
 # Setup
 grovepi.pinMode(PORT_BUZZER, "OUTPUT")
 grovepi.pinMode(PORT_BUTTON, "INPUT")
+lcd.setRGB(0, 0, 100)
 
 grovepi.analogRead(PORT_POTENTIOMETER)
+lcd.setRGB(0, 100, 0)
+
 grovepi.pinMode(PORT_POTENTIOMETER, "INPUT")
 
 lcd.setRGB(0, 128, 0)
