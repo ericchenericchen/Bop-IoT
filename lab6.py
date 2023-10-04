@@ -34,7 +34,7 @@ APPS = [
     my_weather.WEATHER_APP,
     my_reddit.QOTD_APP,
     # TODO: Add your new app here
-    my_spotify.SPOTIFY_APP
+    #my_spotify.SPOTIFY_APP
 ]
 
 # Cache to store values so we save time and don't abuse the APIs
