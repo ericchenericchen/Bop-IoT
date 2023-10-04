@@ -155,11 +155,11 @@ if __name__ == '__main__':
 
     spotify_output = spotify_init()
 
-    song_text = "song: " + spotify_output[0] + ", artists: "
+    # song_text = "song: " + spotify_output[0] + ", artists: "
 
-    for i in range(0, len(spotify_output[1])):
-        song_text = song_text + spotify_output[1][i] + ", "
+    # for i in range(0, len(spotify_output[1])):
+    #     song_text = song_text + spotify_output[1][i] + ", "
     
-    song_text = song_text[0:len(song_text) - 2]
+    # song_text = song_text[0:len(song_text) - 2]
 
-    print(song_text)
+    print(spotify_output)
