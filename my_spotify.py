@@ -129,7 +129,7 @@ def spotify_init():
 
         song_text = "song: " + song_name + ", artists: "
 
-        for i in range(0, len(spotify_output[1])):
+        for i in range(0, len(artist_names)):
             song_text = song_text + artist_names[i] + ", "
     
         song_text = song_text[0:len(song_text) - 2]
