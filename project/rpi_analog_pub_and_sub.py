@@ -37,8 +37,8 @@ def on_message_Mic(client, userdata, msg):
             client.publish("bopit/complete", encoded_text)
         timepassed += 1
         time.sleep(.2)
-        encoded_text = f.encrypt(b"Failed")
-        client.publish("bopit/complete", encoded_text)
+    encoded_text = f.encrypt(b"Failed")
+    client.publish("bopit/complete", encoded_text)
         
 def on_message_Light(client, userdata, msg): #1st possible bop
     timepassed = 0
@@ -51,16 +51,12 @@ def on_message_Light(client, userdata, msg): #1st possible bop
         time.sleep(.05)
     encoded_text = f.encrypt(b"Failed")
     client.publish("bopit/complete", encoded_text)
-    
-
-
 
 def on_message_Complete(client, userdata, msg):  
-    pass 
+    pass
+ 
 def on_message(client, userdata, msg):
-        
     print("on_message: " + msg.topic + " " + str(msg.payload, "utf-8"))
-       
 
 if __name__ == '__main__':
     #this section is covered in publisher_and_subscriber_example.py
@@ -76,7 +72,6 @@ if __name__ == '__main__':
     client.loop_start()
     #setRGB(0,255,0)
     while True:
-        #print("delete this line")
         time.sleep(1)
             
 

@@ -1,13 +1,14 @@
-"""EE 250L Lab 04 Starter Code
+"""Run vm_subscriber.py in a separate terminal on your VM."""
 
-Run vm_subscriber.py in a separate terminal on your VM."""
 from cryptography.fernet import Fernet
 import paho.mqtt.client as mqtt
 import time
 import random
+
 key = b'452diyhX782Qnkwe4OLbM6dFOvYERO9Jx0IEAotNweg='
 f = Fernet(key)
 prev = random.randint(0, 7)
+
 def on_connect(client, userdata, flags, rc):
     print("Connected to server (i.e., broker) with result code "+str(rc))
     client.subscribe("bopit/complete")

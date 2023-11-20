@@ -1,6 +1,4 @@
-"""EE 250L Lab 04 Starter Code
-
-Run vm_publisher.py in a separate terminal on your VM."""
+"""Run vm_publisher.py in a separate terminal on your VM."""
 
 import paho.mqtt.client as mqtt
 import time
@@ -12,6 +10,7 @@ def on_connect(client, userdata, flags, rc):
     #subscribe to topics of interest here
     client.subscribe("rbbaez/led")
     client.subscribe("rbbaez/lcd")
+
 #Default message callback. Please use custom callbacks.
 def on_message(client, userdata, msg):
     print("on_message: " + msg.topic + " " + str(msg.payload, "utf-8"))
@@ -56,6 +55,5 @@ if __name__ == '__main__':
     client.loop_start()
 
     while True:
-        #print("delete this line")
         on_press(input(""))
         time.sleep(1)

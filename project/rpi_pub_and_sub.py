@@ -10,6 +10,7 @@ sys.path.append('../lab-02-grovepi-sensors-RyderBaez/Software/Python/') #make su
 sys.path.append('../lab-02-grovepi-sensors-RyderBaez/Software/Python/grove_rgb_lcd')
 from grove_rgb_lcd import *
 import grovepi
+
 key = b'452diyhX782Qnkwe4OLbM6dFOvYERO9Jx0IEAotNweg='
 f = Fernet(key)
 PORT = 4
@@ -20,19 +21,21 @@ greenled = 7
 blueled = 8
 button = 2
 full_angle = 1027
+
 grovepi.pinMode(redled, "OUTPUT")
 grovepi.pinMode(greenled, "OUTPUT")
 grovepi.pinMode(blueled, "OUTPUT")
 grovepi.pinMode(button, "INPUT")
 grovepi.pinMode(potentiometer,"INPUT")
 grovepi.pinMode(ultrasonic_ranger,"INPUT")
+
 def on_connect(client, userdata, flags, rc):
     print("Connected to server (i.e., broker) with result code "+str(rc))
+    #subscribe to topics of interest here
     client.subscribe("bopit/complete")
     client.subscribe("bopit/ultrasonicRanger")
     client.subscribe("bopit/potentiometer")
     client.subscribe("bopit/button")
-    #subscribe to topics of interest here
 
 #Default message callback. Please use custom callbacks.
 def on_message_Ultrasonic(client, userdata, msg):
@@ -74,6 +77,7 @@ def on_message_Button(client, userdata, msg): #1st possible bop
  #   if str(msg.payload, "utf-8") == 'w' or str(msg.payload, "utf-8") == 's' or str(msg.payload, "utf-8") == 'a' or str(msg.payload, "utf-8") == 'd': 
   #      buf = str(msg.payload, "utf-8") + "               "
    #     setText_norefresh(buf)
+
 def on_message_LED(client, userdata, msg):
     colorchoice = random.randint(0,30)
     if colorchoice % 2 == 0: #50% chance
@@ -140,12 +144,10 @@ def on_message_LED(client, userdata, msg):
     encoded_text = f.encrypt(b"Failed")
     client.publish("bopit/complete", encoded_text)
 
-
-
 def on_message_Complete(client, userdata, msg):  
-    pass 
-def on_message(client, userdata, msg):
-        
+    pass
+
+def on_message(client, userdata, msg):    
     print("on_message: " + msg.topic + " " + str(msg.payload, "utf-8"))
        
 
@@ -155,6 +157,7 @@ if __name__ == '__main__':
     client.on_message = on_message
     client.on_connect = on_connect
     client.connect(host="test.mosquitto.org", port=1883, keepalive=60)
+    
     #client.message_callback_add("rbbaez/lcd", on_message_LCD)
     client.message_callback_add("bopit/led", on_message_LED)
     client.message_callback_add("bopit/ultrasonicRanger", on_message_Ultrasonic)
@@ -164,8 +167,8 @@ if __name__ == '__main__':
     client.loop_start()
     #setRGB(0,255,0)
     grovepi.pinMode(button,"INPUT")
+
     while True:
-        #print("delete this line")
         if grovepi.digitalRead(button):
             client.publish("rbbaez/button", "button is pressed")
         client.publish("rbbaez/ultrasonicRanger",grovepi.ultrasonicRead(PORT))
