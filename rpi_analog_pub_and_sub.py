@@ -35,6 +35,7 @@ def on_message_Mic(client, userdata, msg):
         if(value < tapped):
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
+            return
         timepassed += 1
         time.sleep(.2)
         encoded_text = f.encrypt(b"Failed")
@@ -47,6 +48,7 @@ def on_message_Light(client, userdata, msg): #1st possible bop
         if(value < lowlight):
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
+            return
         timepassed += 1
         time.sleep(.05)
     encoded_text = f.encrypt(b"Failed")
