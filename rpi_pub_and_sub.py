@@ -42,6 +42,7 @@ def on_message_Ultrasonic(client, userdata, msg):
         if abs(grovepi.ultrasonicRead(PORT) - ultradistance) > 100:
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
+            return
         timepassed += 1
         time.sleep(.2)
         encoded_text = f.encrypt(b"Failed")
@@ -54,6 +55,7 @@ def on_message_Potentiometer(client, userdata, msg):
         if abs(grovepi.analogRead(potentiometer) - sensor_value) > 300:
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
+            return
         timepassed += 1
         time.sleep(.2)
         encoded_text = f.encrypt(b"Failed")
@@ -65,6 +67,7 @@ def on_message_Button(client, userdata, msg): #1st possible bop
         if grovepi.digitalRead(button):
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
+            return
         timepassed += 1
         time.sleep(.05)
     encoded_text = f.encrypt(b"Failed")
@@ -135,6 +138,7 @@ def on_message_LED(client, userdata, msg):
         if grovepi.digitalRead(button) and redset == redval and greenset == greenval and blueset == blueval:
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
+            return
         timepassed += 1
         time.sleep(.05)
     encoded_text = f.encrypt(b"Failed")
@@ -165,10 +169,6 @@ if __name__ == '__main__':
     #setRGB(0,255,0)
     grovepi.pinMode(button,"INPUT")
     while True:
-        #print("delete this line")
-        if grovepi.digitalRead(button):
-            client.publish("rbbaez/button", "button is pressed")
-        client.publish("rbbaez/ultrasonicRanger",grovepi.ultrasonicRead(PORT))
         time.sleep(1)
             
 
