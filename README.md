@@ -4,12 +4,12 @@
 # Ryder Baez, Eric Chen
 
 # Included minigames:
-- Bop it        (button)
-- Twist it      (potentiometer)
-- Mix it        (led)
-- Dim it        (light sensor)
-- Shout it      (sound sensor)
-- ULTRASONit    (ultrasonic ranger)
+- Bop it        (button : press the button)
+- Twist it      (potentiometer : twist the potentiometer at least 300 from what it was)
+- Mix it        (led : use potentiometer to match the color)
+- Dim it        (light sensor : cover the light sensor)
+- Shout it      (sound sensor : shout into the sound sensor)
+- ULTRASONit    (ultrasonic ranger : make the ultrasonic sensor read 100 cm difference from what it was before)
 
 # Goals
 - Flap it

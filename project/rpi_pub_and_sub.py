@@ -1,6 +1,4 @@
-"""EE 250L Lab 04 Starter Code
-
-Run rpi_pub_and_sub.py on your Raspberry Pi."""
+"""Run rpi_pub_and_sub.py on your Raspberry Pi."""
 from cryptography.fernet import Fernet
 import paho.mqtt.client as mqtt
 import time
@@ -100,40 +98,45 @@ def on_message_LED(client, userdata, msg):
     timepassed = 0
     while timepassed < 20:
         sensor_value = grovepi.analogRead(potentiometer)
-        if sensor_value > 6 * full_angle / 7:
+        if sensor_value > (7 * full_angle / 8):
             setRGB(128, 128, 128)
             redset = 1
             greenset = 1
             blueset = 1
-        elif sensor_value > 5 * full_angle / 7:
+        elif sensor_value > (6 * full_angle / 8):
             setRGB(128, 0, 128)
             redset = 1
             greenset = 0
             blueset = 1
-        elif sensor_value > 4 * full_angle / 7:
+        elif sensor_value > (5 * full_angle / 8):
             setRGB(0, 128, 128)
             redset = 0
             greenset = 1
             blueset = 1
-        elif sensor_value > 3 * full_angle / 7:
+        elif sensor_value > (4 * full_angle / 8):
             setRGB(128, 128, 0)
             redset = 1
             greenset = 1
             blueset = 0
-        elif sensor_value > 2 * full_angle / 7:
+        elif sensor_value > (3 * full_angle / 8):
             setRGB(0, 0, 128)
             redset = 0
             greenset = 0
             blueset = 1
-        elif sensor_value > full_angle / 7:
+        elif sensor_value > (2*full_angle / 8):
             setRGB(128, 0, 0)
             redset = 1
             greenset = 0
             blueset = 0
-        elif sensor_value > 0:
+        elif sensor_value > (full_angle/8):
             setRGB(0, 128, 0)
             redset = 0
             greenset = 1
+            blueset = 0
+        else:       #Player is actually getting shafted if the random number is 17 or 19 or 23 or 29
+            setRGB(0, 0, 0)
+            redset = 0
+            greenset = 0
             blueset = 0
         if grovepi.digitalRead(button) and redset == redval and greenset == greenval and blueset == blueval:
             encoded_text = f.encrypt(b"Passed")
