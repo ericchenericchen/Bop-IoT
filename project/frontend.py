@@ -3,9 +3,9 @@ from flask import send_from_directory, request
 from flask import render_template
 import webbrowser
 
+max_score = 100
 PORT = 8000
 app = Flask(__name__)
-max_score = 0
 
 # LIST OF OBJECTIVES:
 #     retrieve points, event; store to use later
@@ -48,6 +48,7 @@ def success():
 def failure():
     #STORE THE CURRENT SCORE VALUE, COMPARE TO MAX SCORE, IF HIGHER, UPDATE
     score = 0
+    global max_score
     if score > max_score:
         max_score = score
     return render_template('end.html', score=score, max_score = max_score)
@@ -59,8 +60,3 @@ def wordle():
 @app.post('/flappy')
 def flappy():
     return
-
-if __name__ == "__main__":
-    print(f"serving to http://localhost:{PORT}")
-    print("READY!")
-    webbrowser.open_new(f"http://localhost:{PORT}/index.html")
