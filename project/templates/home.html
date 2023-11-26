@@ -1,0 +1,89 @@
+<!DOCTYPE = HTML>
+<html>
+    <head>
+        <title> Bop It || EE250 Project</title>
+        <meta name="viewport" content="width-device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+        <style>
+            #header{
+                height: 25vh;
+                background-color: #6c8;
+            }
+
+            h1{
+                font-size: 4em;
+                line-height: 25vh;
+            }
+
+            #content{
+                height: 70vh;
+                font-size: 2em;
+            }
+
+            #points{
+                margin-top: 5vh;
+            }
+
+            #event-content{
+                margin-top: 3vh;
+                height: 200px;
+                width: 300px;
+                background-color: #6c8;
+                margin-left: auto;
+                margin-right: auto;
+
+                border-radius: 10%;
+                margin-bottom: 5vh;
+            }
+
+            #event-content p{
+                color: white;
+                font-size: 1em;
+                font-weight: bold;
+                line-height: 200px;
+            }
+
+            #footer{
+                height: 25vh;
+                background-color: #6c8;
+            }
+
+            #footer p{
+                font-size: 0.75em;
+                color: white;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <div id="header" class="row">
+            <h1 class="col-12 text-center"><b>Bop It!</b></h1>
+        </div><!--header-->
+
+        <div id="content" class="row justify-content-center">
+
+            <div id="points" class="col-10 text-center">
+                Points: {{points}}
+            </div>
+
+            <div id="active-event" class="col-10 text-center">
+                <h2>Active Event</h2>
+                <div id="event-content">
+                    <p>{{event}}</p>
+                </div>
+            </div>
+            
+            
+        </div><!--#content-->
+
+
+        <div id="footer" class="row">
+            <p class="col-12 text-center">{{status}}</p>
+        </div><!--footer-->
+
+        <script>
+        </script>
+    </body>
+</html>

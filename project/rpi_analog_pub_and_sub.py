@@ -1,6 +1,4 @@
-"""EE 250L Lab 04 Starter Code
-
-Run rpi_pub_and_sub.py on your Raspberry Pi."""
+"""Run rpi_pub_and_sub.py on your Raspberry Pi."""
 from cryptography.fernet import Fernet
 import paho.mqtt.client as mqtt
 import time
@@ -54,9 +52,6 @@ def on_message_Light(client, userdata, msg): #1st possible bop
     encoded_text = f.encrypt(b"Failed")
     client.publish("bopit/complete", encoded_text)
     
-
-
-
 def on_message_Complete(client, userdata, msg):  
     pass 
 def on_message(client, userdata, msg):

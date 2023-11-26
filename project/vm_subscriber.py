@@ -100,7 +100,6 @@ if __name__ == '__main__':
     client.loop_start()
 
     while True:
-        #print("delete this line")
         if maingame == -1:
             start = input("enter s to restart")
             if start == "s":
