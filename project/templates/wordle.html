@@ -212,7 +212,7 @@
 
             socket.on('generateword', function(data){
                 target = data.word
-                console.log(target)
+                console.log(data.word)
             })
 
             let guessnum = 0
@@ -230,7 +230,6 @@
                 }
                 
                 const letters = words[guessnum].children
-                console.log(letters)
 
                 for(let i = 0; i < letters.length; i++){
                     letters[i].querySelector('p').innerHTML= guess[i]
