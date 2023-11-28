@@ -51,6 +51,11 @@ def success():
 
     points = score
     event = next_game
+
+    if event == "Wordle It":
+        encoded_text = f.encrypt(b"Passed")
+        client.publish("bopit/complete", encoded_text)
+        return    
     status = "SUCCESS"
 
     return render_template('home.html', points=points, event=event, status = status)
@@ -109,7 +114,9 @@ def on_message_Complete(client, userdata, msg):
     if text == "Passed":
         next_game = games[next]
         score += 1
-        socketio.emit('success')
+
+        if next_game != "Wordle It":
+            socketio.emit('success')
 
         if next == 0:
             print(games[next])
@@ -148,7 +155,7 @@ def on_message_Complete(client, userdata, msg):
     else:
         print(text)
         socketio.emit('failure')
-        print("Couldn't keep up")
+        #print("Couldn't keep up")
             
 #Default message callback. Please use custom callbacks.
 def on_message(client, userdata, msg):

@@ -99,7 +99,7 @@ def on_message_LED(client, userdata, msg):
         blueval = 0
         grovepi.digitalWrite(blueled, 0)     
     timepassed = 0
-    while timepassed < 40:
+    while timepassed < 80:
         sensor_value = grovepi.analogRead(potentiometer)
         if sensor_value > (7 * full_angle / 8):
             setRGB(128, 128, 128)
