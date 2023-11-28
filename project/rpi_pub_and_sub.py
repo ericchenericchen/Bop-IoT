@@ -37,8 +37,9 @@ def on_connect(client, userdata, flags, rc):
 def on_message_Ultrasonic(client, userdata, msg):
     ultradistance = grovepi.ultrasonicRead(PORT)
     timepassed = 0
+    time.sleep(.2)
     while timepassed < 10:
-        if abs(grovepi.ultrasonicRead(PORT) - ultradistance) > 100:
+        if abs(grovepi.ultrasonicRead(PORT) - ultradistance) > 50:
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
             return
@@ -50,8 +51,9 @@ def on_message_Ultrasonic(client, userdata, msg):
 def on_message_Potentiometer(client, userdata, msg):
     sensor_value = grovepi.analogRead(potentiometer)
     timepassed = 0
+    time.sleep(.2)
     while timepassed < 20:
-        if abs(grovepi.analogRead(potentiometer) - sensor_value) > 300:
+        if abs(grovepi.analogRead(potentiometer) - sensor_value) > 150:
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
             return

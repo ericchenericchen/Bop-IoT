@@ -15,6 +15,7 @@ score = 0
 max_score = 0
 games = ["Repeat It", "Bop It", "Twist It", "UltrasonIT", "Mix It", "Dim It", "Shout It", "Wordle It"]
 next_game = "Bop It"
+flag = 1
 
 PORT = 8000
 app = Flask(__name__)
@@ -89,6 +90,13 @@ def handle_wordle():
         answer = response.status_code
 
     socketio.emit('generateword', {'word': answer})
+    return
+
+@socketio.on('endwhile')
+def handle_success():
+    global flag
+    flag = 0
+    return
 
 #CALLBACKS
 def on_connect(client, userdata, flags, rc):
@@ -110,6 +118,7 @@ def on_message_Complete(client, userdata, msg):
     global next_game
     global score
     global prev
+    global flag
 
     if text == "Passed":
         next_game = games[next]
@@ -117,7 +126,10 @@ def on_message_Complete(client, userdata, msg):
 
         if next_game != "Wordle It":
             socketio.emit('success')
-
+            while(flag):
+                pass
+            flag = 1
+        
         if next == 0:
             print(games[next])
             next = prev
