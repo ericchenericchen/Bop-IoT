@@ -4,8 +4,8 @@ import paho.mqtt.client as mqtt
 import time
 import sys
 import random
-sys.path.append('../lab-02-grovepi-sensors-RyderBaez/Software/Python/') #make sure this is okay later
-sys.path.append('../lab-02-grovepi-sensors-RyderBaez/Software/Python/grove_rgb_lcd')
+sys.path.append('../../lab-02-grovepi-sensors-RyderBaez/Software/Python/') #make sure this is okay later
+sys.path.append('../../lab-02-grovepi-sensors-RyderBaez/Software/Python/grove_rgb_lcd')
 from grove_rgb_lcd import *
 import grovepi
 key = b'452diyhX782Qnkwe4OLbM6dFOvYERO9Jx0IEAotNweg='
@@ -22,6 +22,7 @@ grovepi.pinMode(redled, "OUTPUT")
 grovepi.pinMode(greenled, "OUTPUT")
 grovepi.pinMode(blueled, "OUTPUT")
 grovepi.pinMode(button, "INPUT")
+
 grovepi.pinMode(potentiometer,"INPUT")
 grovepi.pinMode(ultrasonic_ranger,"INPUT")
 def on_connect(client, userdata, flags, rc):
@@ -30,44 +31,55 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("bopit/ultrasonicRanger")
     client.subscribe("bopit/potentiometer")
     client.subscribe("bopit/button")
+    client.subscribe("bopit/led")
     #subscribe to topics of interest here
 
 #Default message callback. Please use custom callbacks.
 def on_message_Ultrasonic(client, userdata, msg):
     ultradistance = grovepi.ultrasonicRead(PORT)
     timepassed = 0
-    while timepassed < 5:
-        if abs(grovepi.ultrasonicRead(PORT) - ultradistance) > 100:
+    value = 0
+    time.sleep(.2)
+    while timepassed < 20:
+        value = grovepi.ultrasonicRead(PORT)
+        if abs(value - ultradistance) > 50:
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
             return
+        print(abs(value - ultradistance))
         timepassed += 1
         time.sleep(.2)
-        encoded_text = f.encrypt(b"Failed")
-        client.publish("bopit/complete", encoded_text)
+    encoded_text = f.encrypt(b"Failed")
+    client.publish("bopit/complete", encoded_text)
         
 def on_message_Potentiometer(client, userdata, msg):
     sensor_value = grovepi.analogRead(potentiometer)
     timepassed = 0
-    while timepassed < 5:
-        if abs(grovepi.analogRead(potentiometer) - sensor_value) > 300:
+    value = 0
+    time.sleep(.2)
+    while timepassed < 20:
+        value = grovepi.analogRead(potentiometer)
+        if abs(value - sensor_value) > 150:
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
             return
+        print(value)
         timepassed += 1
         time.sleep(.2)
-        encoded_text = f.encrypt(b"Failed")
-        client.publish("bopit/complete", encoded_text)
+    encoded_text = f.encrypt(b"Failed")
+    client.publish("bopit/complete", encoded_text)
         
 def on_message_Button(client, userdata, msg): #1st possible bop
     timepassed = 0
-    while timepassed < 20:
+    while timepassed < 500:
         if grovepi.digitalRead(button):
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
+            #print("we did it :)")
             return
         timepassed += 1
-        time.sleep(.05)
+        #print("hey")
+        time.sleep(.01)
     encoded_text = f.encrypt(b"Failed")
     client.publish("bopit/complete", encoded_text)
     
@@ -96,39 +108,39 @@ def on_message_LED(client, userdata, msg):
         blueval = 0
         grovepi.digitalWrite(blueled, 0)     
     timepassed = 0
-    while timepassed < 20:
+    while timepassed < 80:
         sensor_value = grovepi.analogRead(potentiometer)
-        if sensor_value > (7 * full_angle / 8):
+        if sensor_value > (7 * full_angle / 9):
             setRGB(128, 128, 128)
             redset = 1
             greenset = 1
             blueset = 1
-        elif sensor_value > (6 * full_angle / 8):
+        elif sensor_value > (6 * full_angle / 9):
             setRGB(128, 0, 128)
             redset = 1
             greenset = 0
             blueset = 1
-        elif sensor_value > (5 * full_angle / 8):
+        elif sensor_value > (5 * full_angle / 9):
             setRGB(0, 128, 128)
             redset = 0
             greenset = 1
             blueset = 1
-        elif sensor_value > (4 * full_angle / 8):
+        elif sensor_value > (4 * full_angle / 9):
             setRGB(128, 128, 0)
             redset = 1
             greenset = 1
             blueset = 0
-        elif sensor_value > (3 * full_angle / 8):
+        elif sensor_value > (3 * full_angle / 9):
             setRGB(0, 0, 128)
             redset = 0
             greenset = 0
             blueset = 1
-        elif sensor_value > (2*full_angle / 8):
+        elif sensor_value > (2*full_angle / 9):
             setRGB(128, 0, 0)
             redset = 1
             greenset = 0
             blueset = 0
-        elif sensor_value > (full_angle/8):
+        elif sensor_value > (full_angle/9):
             setRGB(0, 128, 0)
             redset = 0
             greenset = 1
@@ -169,7 +181,7 @@ if __name__ == '__main__':
     client.message_callback_add("bopit/button", on_message_Button)
     client.message_callback_add("bopit/complete", on_message_Complete)
     client.loop_start()
-    #setRGB(0,255,0)
+    setRGB(0,0,0)
     grovepi.pinMode(button,"INPUT")
     while True:
         time.sleep(1)

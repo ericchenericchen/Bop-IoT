@@ -15,6 +15,7 @@ score = 0
 max_score = 0
 games = ["Repeat It", "Bop It", "Twist It", "UltrasonIT", "Mix It", "Dim It", "Shout It", "Wordle It"]
 next_game = "Bop It"
+flag = 1
 
 PORT = 8000
 app = Flask(__name__)
@@ -53,6 +54,9 @@ def success():
     event = next_game
     status = "SUCCESS"
 
+    if event == "Wordle It":
+        encoded_text = f.encrypt(b"Passed")
+        client.publish("bopit/complete", encoded_text)
     return render_template('home.html', points=points, event=event, status = status)
 
 @app.route('/play/failure')
@@ -84,6 +88,13 @@ def handle_wordle():
         answer = response.status_code
 
     socketio.emit('generateword', {'word': answer})
+    return
+
+@socketio.on('endwhile')
+def handle_success():
+    global flag
+    flag = 0
+    return
 
 #CALLBACKS
 def on_connect(client, userdata, flags, rc):
@@ -98,19 +109,25 @@ def on_connect(client, userdata, flags, rc):
     #subscribe to the bop its
 
 def on_message_Complete(client, userdata, msg):
-    decrypt_text = f.decrypt(msg)
+    decrypt_text = f.decrypt(msg.payload)
     text = str(decrypt_text, "utf-8")
-    next = random.randint(0, 8)
+    next = random.randint(0, 7)
 
     global next_game
     global score
     global prev
+    global flag
 
-    if text == b"Passed":
+    if text == "Passed":
         next_game = games[next]
         score += 1
-        socketio.emit('success')
 
+        if next_game != "Wordle It":
+            socketio.emit('success')
+            while(flag):
+                pass
+            flag = 1
+        
         if next == 0:
             print(games[next])
             next = prev
@@ -146,8 +163,9 @@ def on_message_Complete(client, userdata, msg):
         
         prev = next
     else:
+        print(text)
         socketio.emit('failure')
-        print("Couldn't keep up")
+        #print("Couldn't keep up")
             
 #Default message callback. Please use custom callbacks.
 def on_message(client, userdata, msg):
