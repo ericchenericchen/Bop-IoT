@@ -219,7 +219,8 @@
             const words = document.querySelectorAll(".word")
 
             document.querySelector('#guess-word').onsubmit = () =>{
-                const guess = document.querySelector('#guess').value.trim()
+                let raw = document.querySelector('#guess').value.trim()
+                let guess = raw.toUpperCase()
 
                 if(guess.length != 5){
                     document.querySelector('#error').innerHTML = "Invalid guess"
