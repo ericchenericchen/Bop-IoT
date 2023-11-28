@@ -52,13 +52,11 @@ def success():
 
     points = score
     event = next_game
+    status = "SUCCESS"
 
     if event == "Wordle It":
         encoded_text = f.encrypt(b"Passed")
         client.publish("bopit/complete", encoded_text)
-        return    
-    status = "SUCCESS"
-
     return render_template('home.html', points=points, event=event, status = status)
 
 @app.route('/play/failure')
