@@ -46,7 +46,6 @@ def on_message_Ultrasonic(client, userdata, msg):
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
             return
-        print(abs(value - ultradistance))
         timepassed += 1
         time.sleep(.2)
     encoded_text = f.encrypt(b"Failed")
@@ -63,7 +62,6 @@ def on_message_Potentiometer(client, userdata, msg):
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
             return
-        print(value)
         timepassed += 1
         time.sleep(.2)
     encoded_text = f.encrypt(b"Failed")
@@ -75,7 +73,6 @@ def on_message_Button(client, userdata, msg): #1st possible bop
         if grovepi.digitalRead(button):
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
-            #print("we did it :)")
             return
         timepassed += 1
         #print("hey")
