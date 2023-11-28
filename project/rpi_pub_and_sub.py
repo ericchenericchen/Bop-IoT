@@ -39,7 +39,7 @@ def on_message_Ultrasonic(client, userdata, msg):
     ultradistance = grovepi.ultrasonicRead(PORT)
     timepassed = 0
     time.sleep(.2)
-    while timepassed < 10:
+    while timepassed < 80:
         if abs(grovepi.ultrasonicRead(PORT) - ultradistance) > 50:
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
@@ -53,7 +53,7 @@ def on_message_Potentiometer(client, userdata, msg):
     sensor_value = grovepi.analogRead(potentiometer)
     timepassed = 0
     time.sleep(.2)
-    while timepassed < 40:
+    while timepassed < 80:
         if abs(grovepi.analogRead(potentiometer) - sensor_value) > 150:
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
@@ -104,37 +104,37 @@ def on_message_LED(client, userdata, msg):
     timepassed = 0
     while timepassed < 80:
         sensor_value = grovepi.analogRead(potentiometer)
-        if sensor_value > (7 * full_angle / 8):
+        if sensor_value > (7 * full_angle / 9):
             setRGB(128, 128, 128)
             redset = 1
             greenset = 1
             blueset = 1
-        elif sensor_value > (6 * full_angle / 8):
+        elif sensor_value > (6 * full_angle / 9):
             setRGB(128, 0, 128)
             redset = 1
             greenset = 0
             blueset = 1
-        elif sensor_value > (5 * full_angle / 8):
+        elif sensor_value > (5 * full_angle / 9):
             setRGB(0, 128, 128)
             redset = 0
             greenset = 1
             blueset = 1
-        elif sensor_value > (4 * full_angle / 8):
+        elif sensor_value > (4 * full_angle / 9):
             setRGB(128, 128, 0)
             redset = 1
             greenset = 1
             blueset = 0
-        elif sensor_value > (3 * full_angle / 8):
+        elif sensor_value > (3 * full_angle / 9):
             setRGB(0, 0, 128)
             redset = 0
             greenset = 0
             blueset = 1
-        elif sensor_value > (2*full_angle / 8):
+        elif sensor_value > (2*full_angle / 9):
             setRGB(128, 0, 0)
             redset = 1
             greenset = 0
             blueset = 0
-        elif sensor_value > (full_angle/8):
+        elif sensor_value > (full_angle/9):
             setRGB(0, 128, 0)
             redset = 0
             greenset = 1
