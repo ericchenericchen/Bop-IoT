@@ -113,7 +113,7 @@ def on_connect(client, userdata, flags, rc):
 def on_message_Complete(client, userdata, msg):
     decrypt_text = f.decrypt(msg.payload)
     text = str(decrypt_text, "utf-8")
-    next = random.randint(0, 8)
+    next = random.randint(0, 7)
 
     global next_game
     global score

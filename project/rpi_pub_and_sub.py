@@ -22,8 +22,9 @@ grovepi.pinMode(redled, "OUTPUT")
 grovepi.pinMode(greenled, "OUTPUT")
 grovepi.pinMode(blueled, "OUTPUT")
 grovepi.pinMode(button, "INPUT")
-#grovepi.pinMode(potentiometer,"INPUT")
-#grovepi.pinMode(ultrasonic_ranger,"INPUT")
+
+grovepi.pinMode(potentiometer,"INPUT")
+grovepi.pinMode(ultrasonic_ranger,"INPUT")
 def on_connect(client, userdata, flags, rc):
     print("Connected to server (i.e., broker) with result code "+str(rc))
     client.subscribe("bopit/complete")
@@ -52,7 +53,7 @@ def on_message_Potentiometer(client, userdata, msg):
     sensor_value = grovepi.analogRead(potentiometer)
     timepassed = 0
     time.sleep(.2)
-    while timepassed < 20:
+    while timepassed < 40:
         if abs(grovepi.analogRead(potentiometer) - sensor_value) > 150:
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
