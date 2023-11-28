@@ -19,14 +19,14 @@ next_game = "Bop It"
 
 PORT = 8000
 app = Flask(__name__)
-socketio = SocketIO(app, port=PORT)
+socketio = SocketIO(app, port=PORT, engineio_logger=True, logger=True)
 
 #ROUTES
 @app.route('/')
 def home():
     return render_template('start.html')
 
-@app.route('/play/start', methods=['GET'])
+@app.route('/play/start')
 def start():
     global score
     global maingame
@@ -44,7 +44,7 @@ def start():
     event = "Bop It"
     return render_template('home.html', points=points, event=event)
 
-@app.route('/play/success', methods=['GET'])
+@app.route('/play/success')
 def success():
     global score
     global next_game
@@ -55,7 +55,7 @@ def success():
 
     return render_template('home.html', points=points, event=event, status = status)
 
-@app.route('/play/failure', methods=['GET'])
+@app.route('/play/failure')
 def failure():
     global score
     global max_score
@@ -67,28 +67,24 @@ def failure():
         max_score = score
     return render_template('end.html', score=score, max_score = max_score)
 
-@app.route('/play/wordle', methods=['GET'])
+@app.route('/play/wordle')
 def wordle():
-    # guesses = 0
+    return render_template('wordle.html')
 
+# Testing socketio works correctly!
+#
+# @socketio.on('test')
+# def test():
+#     socketio.emit('wordle')
+
+@socketio.on('giveword')
+def handle_message():
     link = "https://random-word-api.herokuapp.com/word?length=5"
     response = requests.get(link)
     if response.status_code == 200:
-        answer = response.json()[0]
-    else:
-        print(response.status_code)
-    
-    # print("O means correct place, # means in word wrong place, X means not in word")
-    # while guesses < 6:
-    #     guess = input("guess a word") # this is where you would put in the HTML stuff Eric
-    #     if WordleCheck(guess, answer):
-    #         maingame = 0
-    #         client.publish("bopit/complete")
-    #     maingame = -1
+        answer = response.json()[0].upper()
 
-    socketio.emit('generateword', {'word': answer}, namespace='/test')
-
-    return render_template('wordle.html', target = answer)
+    socketio.emit('generateword', {'word': answer})
 
 #CALLBACKS
 def on_connect(client, userdata, flags, rc):
@@ -119,7 +115,7 @@ def on_message_Complete(client, userdata, msg):
     if text == b"Passed":
         next_game = games[next]
         score += 1
-        socketio.emit('success', namespace='/test')
+        socketio.emit('success')
 
         if next == 0:
             print(games[next])
@@ -153,13 +149,13 @@ def on_message_Complete(client, userdata, msg):
             if prev > 0:
                 print(games[next])
             maingame = 1
-            socketio.emit('wordle', namespace='/test')
+            socketio.emit('wordle')
         
         prev = next
 
     else:
         maingame = -1
-        socketio.emit('failure', namespace='/test')
+        socketio.emit('failure')
         print("Couldn't keep up")
             
 def WordleCheck(guess, answer):
@@ -200,7 +196,7 @@ if __name__ == '__main__':
     client.connect(host="test.mosquitto.org", port=1883, keepalive=60)
     client.loop_start()
 
-    socketio.run(app, port=PORT) #start the flask server, blocks out to listen for flask requests (CAN'T WHILE LOOP)
+    socketio.run(app, port=PORT, debug=True) #start the flask server, blocks out to listen for flask requests (CAN'T WHILE LOOP)
 
     # while True:
     #     if maingame == -1:
