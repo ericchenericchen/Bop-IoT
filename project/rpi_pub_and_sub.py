@@ -46,7 +46,7 @@ def on_message_Ultrasonic(client, userdata, msg):
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
             return
-        print(value)
+        print(abs(value - ultradistance))
         timepassed += 1
         time.sleep(.2)
     encoded_text = f.encrypt(b"Failed")
