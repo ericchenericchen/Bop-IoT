@@ -95,6 +95,7 @@ def on_message_LED(client, userdata, msg):
     if colorchoice % 3 == 0 or colorchoice % 5 == 0:#50% chance
         greenval = 1
         grovepi.digitalWrite(greenled, 1)
+        print("green")
     else:
         greenval = 0
         grovepi.digitalWrite(greenled, 0)
