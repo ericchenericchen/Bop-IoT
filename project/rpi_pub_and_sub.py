@@ -4,8 +4,8 @@ import paho.mqtt.client as mqtt
 import time
 import sys
 import random
-sys.path.append('../lab-02-grovepi-sensors-RyderBaez/Software/Python/') #make sure this is okay later
-sys.path.append('../lab-02-grovepi-sensors-RyderBaez/Software/Python/grove_rgb_lcd')
+sys.path.append('../../lab-02-grovepi-sensors-RyderBaez/Software/Python/') #make sure this is okay later
+sys.path.append('../../lab-02-grovepi-sensors-RyderBaez/Software/Python/grove_rgb_lcd')
 from grove_rgb_lcd import *
 import grovepi
 key = b'452diyhX782Qnkwe4OLbM6dFOvYERO9Jx0IEAotNweg='
@@ -22,21 +22,22 @@ grovepi.pinMode(redled, "OUTPUT")
 grovepi.pinMode(greenled, "OUTPUT")
 grovepi.pinMode(blueled, "OUTPUT")
 grovepi.pinMode(button, "INPUT")
-grovepi.pinMode(potentiometer,"INPUT")
-grovepi.pinMode(ultrasonic_ranger,"INPUT")
+#grovepi.pinMode(potentiometer,"INPUT")
+#grovepi.pinMode(ultrasonic_ranger,"INPUT")
 def on_connect(client, userdata, flags, rc):
     print("Connected to server (i.e., broker) with result code "+str(rc))
     client.subscribe("bopit/complete")
     client.subscribe("bopit/ultrasonicRanger")
     client.subscribe("bopit/potentiometer")
     client.subscribe("bopit/button")
+    client.subscribe("bopit/led")
     #subscribe to topics of interest here
 
 #Default message callback. Please use custom callbacks.
 def on_message_Ultrasonic(client, userdata, msg):
     ultradistance = grovepi.ultrasonicRead(PORT)
     timepassed = 0
-    while timepassed < 5:
+    while timepassed < 10:
         if abs(grovepi.ultrasonicRead(PORT) - ultradistance) > 100:
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
@@ -49,7 +50,7 @@ def on_message_Ultrasonic(client, userdata, msg):
 def on_message_Potentiometer(client, userdata, msg):
     sensor_value = grovepi.analogRead(potentiometer)
     timepassed = 0
-    while timepassed < 5:
+    while timepassed < 20:
         if abs(grovepi.analogRead(potentiometer) - sensor_value) > 300:
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
@@ -61,13 +62,15 @@ def on_message_Potentiometer(client, userdata, msg):
         
 def on_message_Button(client, userdata, msg): #1st possible bop
     timepassed = 0
-    while timepassed < 20:
+    while timepassed < 500:
         if grovepi.digitalRead(button):
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
+            #print("we did it :)")
             return
         timepassed += 1
-        time.sleep(.05)
+        #print("hey")
+        time.sleep(.01)
     encoded_text = f.encrypt(b"Failed")
     client.publish("bopit/complete", encoded_text)
     
@@ -96,7 +99,7 @@ def on_message_LED(client, userdata, msg):
         blueval = 0
         grovepi.digitalWrite(blueled, 0)     
     timepassed = 0
-    while timepassed < 20:
+    while timepassed < 40:
         sensor_value = grovepi.analogRead(potentiometer)
         if sensor_value > (7 * full_angle / 8):
             setRGB(128, 128, 128)
@@ -169,7 +172,7 @@ if __name__ == '__main__':
     client.message_callback_add("bopit/button", on_message_Button)
     client.message_callback_add("bopit/complete", on_message_Complete)
     client.loop_start()
-    #setRGB(0,255,0)
+    setRGB(0,0,0)
     grovepi.pinMode(button,"INPUT")
     while True:
         time.sleep(1)

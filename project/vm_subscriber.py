@@ -98,7 +98,7 @@ def on_connect(client, userdata, flags, rc):
     #subscribe to the bop its
 
 def on_message_Complete(client, userdata, msg):
-    decrypt_text = f.decrypt(msg)
+    decrypt_text = f.decrypt(msg.payload)
     text = str(decrypt_text, "utf-8")
     next = random.randint(0, 8)
 
@@ -106,7 +106,7 @@ def on_message_Complete(client, userdata, msg):
     global score
     global prev
 
-    if text == b"Passed":
+    if text == "Passed":
         next_game = games[next]
         score += 1
         socketio.emit('success')
@@ -146,6 +146,7 @@ def on_message_Complete(client, userdata, msg):
         
         prev = next
     else:
+        print(text)
         socketio.emit('failure')
         print("Couldn't keep up")
             
