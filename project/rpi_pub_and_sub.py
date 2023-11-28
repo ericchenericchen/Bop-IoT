@@ -40,7 +40,7 @@ def on_message_Ultrasonic(client, userdata, msg):
     timepassed = 0
     value = 0
     time.sleep(.2)
-    while timepassed < 120:
+    while timepassed < 20:
         value = grovepi.ultrasonicRead(PORT)
         if abs(value - ultradistance) > 50:
             encoded_text = f.encrypt(b"Passed")
@@ -49,15 +49,15 @@ def on_message_Ultrasonic(client, userdata, msg):
         print(value)
         timepassed += 1
         time.sleep(.2)
-        encoded_text = f.encrypt(b"Failed")
-        client.publish("bopit/complete", encoded_text)
+    encoded_text = f.encrypt(b"Failed")
+    client.publish("bopit/complete", encoded_text)
         
 def on_message_Potentiometer(client, userdata, msg):
     sensor_value = grovepi.analogRead(potentiometer)
     timepassed = 0
     value = 0
     time.sleep(.2)
-    while timepassed < 80:
+    while timepassed < 20:
         value = grovepi.analogRead(potentiometer)
         if abs(value - sensor_value) > 150:
             encoded_text = f.encrypt(b"Passed")
@@ -66,8 +66,8 @@ def on_message_Potentiometer(client, userdata, msg):
         print(value)
         timepassed += 1
         time.sleep(.2)
-        encoded_text = f.encrypt(b"Failed")
-        client.publish("bopit/complete", encoded_text)
+    encoded_text = f.encrypt(b"Failed")
+    client.publish("bopit/complete", encoded_text)
         
 def on_message_Button(client, userdata, msg): #1st possible bop
     timepassed = 0
