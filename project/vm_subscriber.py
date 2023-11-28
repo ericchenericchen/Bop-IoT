@@ -4,11 +4,101 @@ import time
 import random
 import json
 import requests
+
+from flask import Flask, request, render_template
+from flask_socketio import SocketIO
+
 key = b'452diyhX782Qnkwe4OLbM6dFOvYERO9Jx0IEAotNweg='
 f = Fernet(key)
 prev = 1
 score = 0
-maingame = 0
+max_score = 0
+games = ["Repeat It", "Bop It", "Twist It", "UltrasonIT", "Mix It", "Dim It", "Shout It", "Wordle It"]
+next_game = "Bop It"
+flag = 1
+
+PORT = 8000
+app = Flask(__name__)
+socketio = SocketIO(app, port=PORT, engineio_logger=True, logger=True)
+
+#ROUTES
+@app.route('/')
+def home():
+    return render_template('start.html')
+
+@app.route('/play/start')
+def start():
+    global score
+    global prev
+    global next_game
+
+    score = 0
+    prev = 1
+    next_game = "Bop It"
+
+    client.publish("bopit/button")
+
+    points = score
+    event = "Bop It"
+
+    print("STARTED GAME!")
+    
+    return render_template('home.html', points=points, event=event)
+
+@app.route('/play/success')
+def success():
+    global score
+    global next_game
+
+    points = score
+    event = next_game
+    status = "SUCCESS"
+
+    if event == "Wordle It":
+        client.publish("bopit/button")
+        points = score + 1
+        event = "Bop It"
+    
+    return render_template('home.html', points=points, event=event, status = status)
+
+@app.route('/play/failure')
+def failure():
+    global score
+    global max_score
+    
+    if score > max_score:
+        max_score = score
+    return render_template('end.html', score=score, max_score = max_score)
+
+@app.route('/play/wordle')
+def wordle():
+    return render_template('wordle.html')
+
+# Testing socketio works correctly!
+#
+# @socketio.on('test')
+# def test():
+#     socketio.emit('wordle')
+
+@socketio.on('giveword')
+def handle_wordle():
+    link = "https://random-word-api.herokuapp.com/word?length=5"
+    response = requests.get(link)
+    if response.status_code == 200:
+        answer = response.json()[0].upper()
+    else:
+        answer = response.status_code
+
+    socketio.emit('generateword', {'word': answer})
+    return
+
+@socketio.on('endwhile')
+def handle_success():
+    global flag
+    flag = 0
+    return
+
+#CALLBACKS
 def on_connect(client, userdata, flags, rc):
     print("Connected to server (i.e., broker) with result code "+str(rc))
     client.subscribe("bopit/complete")
@@ -18,77 +108,72 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("bopit/led")
     client.subscribe("bopit/mic")
     client.subscribe("bopit/light")
-    print("Bop It")
-    client.publish("bopit/button")
     #subscribe to the bop its
+
 def on_message_Complete(client, userdata, msg):
-    decrypt_text = f.decrypt(msg)
+    decrypt_text = f.decrypt(msg.payload)
     text = str(decrypt_text, "utf-8")
-    next = random.randint(0, 8)
-    if text == b"Passed":
+    next = random.randint(0, 7)
+
+    global next_game
+    global score
+    global prev
+    global flag
+
+    if text == "Passed":
+        next_game = games[next]
         score += 1
+
+        if next_game != "Wordle It":
+            socketio.emit('success')
+            while(flag):
+                pass
+            flag = 1
+        
         if next == 0:
+            print(games[next])
             next = prev
             prev = -1
-            print("Repeat It")
         if next == 1:
             if prev > 0:
-                print("Bop It")
+                print(games[next])
             client.publish("bopit/button")
         if next == 2:
             if prev > 0:
-                print("Twist It")
+                print(games[next])
             client.publish("bopit/potentiometer")
         if next == 3:
             if prev > 0:
-                print("UltrasonIT")
+                print(games[next])
             client.publish("bopit/ultrasonicRanger")
         if next == 4:
             if prev > 0:
-                print("Mix It")
+                print(games[next])
             client.publish("bopit/led")
         if next == 5:
             if prev > 0:
-                print("Dim It")
+                print(games[next])
             client.publish("bopit/light")
         if next == 6:
             if prev > 0:
-                print("Shout It")
+                print(games[next])
             client.publish("bopit/mic")
         if next == 7:
             if prev > 0:
-                print("Wordle It")
-            maingame = 1 # idk why this is greyed out it should be fine it is global
+                print(games[next])
+            socketio.emit('wordle')
+        
+        prev = next
     else:
-        maingame = -1
-        print("Couldn't keep up")
-            
-def WordleCheck(guess, answer):
-    compare = ""
-    for i in range(0,5):
-        max = 0
-        for j in range(0,5):
-            if guess[i] == answer[j] and i == j:
-                max = 3
-            elif guess[i] == answer[j] and max < 3:
-                max = 2
-            elif max < 2:
-                max = 1
-        if max == 3:
-            compare += "O"
-        elif max == 2:
-            compare += "#"
-        elif max == 1:
-            compare += "X"
-    print(compare)
-    if compare == "OOOOO":
-        return True
-    return False
+        print(text)
+        socketio.emit('failure')
+        #print("Couldn't keep up")
             
 #Default message callback. Please use custom callbacks.
 def on_message(client, userdata, msg):
     pass
 
+#MAIN
 if __name__ == '__main__':
     #this section is covered in publisher_and_subscriber_example.py
     client = mqtt.Client()
@@ -99,29 +184,4 @@ if __name__ == '__main__':
     client.connect(host="test.mosquitto.org", port=1883, keepalive=60)
     client.loop_start()
 
-    while True:
-        #print("delete this line")
-        if maingame == -1:
-            start = input("enter s to restart")
-            if start == "s":
-                score = 0
-                maingame = 0
-                prev = 1
-                print("Bop It")
-                client.publish("bopit/button")
-        if maingame == 1:
-            guesses = 0
-            link = "https://random-word-api.herokuapp.com/word?length=5"
-            response = requests.get(link)
-            if response.status_code == 200:
-                answer = response.json()[0]
-            print("O means correct place, # means in word wrong place, X means not in word")
-            while guesses < 6:
-                guess = input("guess a word") # this is where you would put in the HTML stuff Eric
-                if WordleCheck(guess, answer):
-                    print("Correct!") #this is completely pointless and can be removed
-                    maingame = 0
-                    client.publish("bopit/complete")
-        time.sleep(1)     
-        
-           
+    socketio.run(app, port=PORT, debug=True) #start the flask server, blocks out to listen for flask requests (CAN'T WHILE LOOP)

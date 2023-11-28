@@ -1,6 +1,4 @@
-"""EE 250L Lab 04 Starter Code
-
-Run rpi_pub_and_sub.py on your Raspberry Pi."""
+"""Run rpi_pub_and_sub.py on your Raspberry Pi."""
 from cryptography.fernet import Fernet
 import paho.mqtt.client as mqtt
 import time
@@ -15,7 +13,7 @@ SPI_PORT   = 0
 SPI_DEVICE = 0
 mcp = Adafruit_MCP3008.MCP3008(spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE))
 lowlight = 250
-tapped = 150
+tapped = 250
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.OUT)
 
@@ -30,20 +28,20 @@ def on_connect(client, userdata, flags, rc):
         
 def on_message_Mic(client, userdata, msg):
     timepassed = 0
-    while timepassed < 5:
+    while timepassed < 20:
         value = mcp.read_adc(1)
-        if(value < tapped):
+        if(value > tapped):
             encoded_text = f.encrypt(b"Passed")
             client.publish("bopit/complete", encoded_text)
             return
         timepassed += 1
         time.sleep(.2)
-        encoded_text = f.encrypt(b"Failed")
-        client.publish("bopit/complete", encoded_text)
+    encoded_text = f.encrypt(b"Failed")
+    client.publish("bopit/complete", encoded_text)
         
 def on_message_Light(client, userdata, msg): #1st possible bop
     timepassed = 0
-    while timepassed < 20:
+    while timepassed < 80:
         value = mcp.read_adc(0)
         if(value < lowlight):
             encoded_text = f.encrypt(b"Passed")
@@ -54,9 +52,6 @@ def on_message_Light(client, userdata, msg): #1st possible bop
     encoded_text = f.encrypt(b"Failed")
     client.publish("bopit/complete", encoded_text)
     
-
-
-
 def on_message_Complete(client, userdata, msg):  
     pass 
 def on_message(client, userdata, msg):

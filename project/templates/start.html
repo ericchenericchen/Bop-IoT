@@ -1,0 +1,65 @@
+<!DOCTYPE = HTML>
+<html>
+    <head>
+        <title> Bop It || EE250 Project</title>
+        <meta name="viewport" content="width-device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+        <style>
+            #header{
+                height: 25vh;
+                background-color: #6c8;
+            }
+
+            h1{
+                font-size: 4em;
+                line-height: 25vh;
+            }
+
+            #content{
+                height: 70vh;
+                font-size: 2em;
+            }
+
+            #start-game button{
+                margin-top: 5vh;
+
+                margin-right: auto;
+                margin-left: auto;
+            }
+            
+            #footer{
+                height: 25vh;
+                background-color: #6c8;
+            }
+
+            #footer p{
+                font-size: 0.75em;
+                color: white;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <div id="header" class="row">
+            <h1 class="col-12 text-center"><b>Bop It!</b></h1>
+        </div><!--header-->
+
+        <div id="content" class="row justify-content-center">
+            <div id="start-game" class="col-10 justify-content-center text-center">
+                <button id="start-button" class="btn btn-outline-success">Start Game</button>
+            </div>
+        </div><!--#content-->
+
+
+        <div id="footer" class="row">
+        </div><!--footer-->
+
+        <script>
+            document.querySelector('#start-button').onclick = () =>{
+                window.open('/play/start', '_self')
+            }
+        </script>
+    </body>
+</html>
