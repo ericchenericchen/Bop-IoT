@@ -26,8 +26,14 @@
 Fulfills:
 - At least 3 nodes (raspberry pi 1 (analog sensors), raspberry pi 2 (grovepi sensors), MQTT server, you could also count flask server as a separate node)
 - At least 2 physical sensors (potentiometer, ultrasonic ranger, button, 3 leds, RGB LCD screen, light sensor (on PCB), sound sensor (on PCB))
-- EXTRA: 1 virtual API sensor (5 letter word api)
+- EXTRA: 1 virtual API sensor (5 letter word API: `https://random-word-api.herokuapp.com/home`)
 - Simple event processing and encryption (win/loss of bop it, no cheating in bop it)
 - Data transfer between nodes (MQTT pub/sub)
 - Data transfer between nodes (uses socket to send signals to flask frontend from MQTT callbacks)
 - Web frontend (flask and flask_socketIO)
+
+External Libraries (check files):
+- MQTT Paho
+- Flask
+- Flask socketio
+- Fernet (cryptography)
