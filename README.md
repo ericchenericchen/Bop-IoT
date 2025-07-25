@@ -22,7 +22,7 @@
 - Press buttons on flask frontend, bop it points and current game will be displayed and updated
 - On loss, max score of session and last score are displayed, play again button can be pressed to restart
 
-# NO THOUGHTS HEAD EMPTY
+# Features implemented
 Fulfills:
 - At least 3 nodes (raspberry pi 1 (analog sensors), raspberry pi 2 (grovepi sensors), MQTT server, you could also count flask server as a separate node)
 - At least 2 physical sensors (potentiometer, ultrasonic ranger, button, 3 leds, RGB LCD screen, light sensor (on PCB), sound sensor (on PCB))
